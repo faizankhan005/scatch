@@ -10,12 +10,16 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const { hash } = require('crypto');
 const crypto = require('crypto');
+const {generateToken} = require("./utils/generateToken");
+
 
 
 const indexRouter = require("./routes/index");
 const ownersRouter = require("./routes/ownersRouter");
 const usersRouter = require("./routes/usersRouter");
 const productsRouter = require("./routes/productsRouter");
+
+require('dotenv').config();
 
 
 app.use(express.static(path.join(__dirname, 'public')));
