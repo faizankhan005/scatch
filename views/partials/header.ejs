@@ -10,6 +10,19 @@
 </head>
 
 <body class="font-['helvetica_now_display']">
-    <nav class="w-full fixed top-0 left-0 px-5 py-3">
-        <h3 class="text-xl">Scatch</h3>
+    <nav class="w-full flex justify-between px-5 py-5">
+        <a href="/shop" class="text-xl">Scatch</a>
+        <% var loggedin=typeof loggedin !=='undefined' ? loggedin : true %>
+            <% if (loggedin) { %>
+                <div class="flex gap-5">
+                    <a href="/shop"><i class="ri-shopping-bag-line text-2xl"></i></a>
+                    <!-- <a href="/owners/admin/product/create">Add Product</a> -->
+                    <!-- <a href="/owners/login">Owner Login</a> -->
+                    <a href="/cart"><i class="ri-shopping-cart-2-line text-2xl"></i></a>
+                    <!-- <a href="/login">Login</a> -->
+                    <!-- <a href="/register">Register</a> -->
+                    <a href="/account"><i class="ri-user-line text-2xl"></i></a>
+                    <a href="/users/logout"><i class="ri-logout-box-r-line text-2xl"></i></a>
+                </div>
+                <% }%>
     </nav>

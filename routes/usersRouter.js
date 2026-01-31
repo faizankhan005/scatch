@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { registerUser } = require("../controllers/authController");
-const jwt = require("jsonwebtoken");
-
+const { registerUser , loginUser, logoutUser } = require("../controllers/authController");
+const isLoggedin = require('../middlewares/isLoggedin');
 
 router.get("/", function (req, res) {
     res.send("hey");
 });
-router.post("/create", registerUser );
+router.post("/register", registerUser );
+
+router.post("/login", loginUser);
+router.get("/logout", logoutUser);
 
 module.exports = router;

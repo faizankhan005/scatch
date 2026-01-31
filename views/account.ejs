@@ -1,0 +1,167 @@
+
+<%- include('./partials/header') %>
+
+<% orders = orders || []; %>
+<% favorites = favorites || []; %>
+<% recentlyViewed = recentlyViewed || []; %>
+<% payments = payments || []; %>
+
+<% if (!user) { %>
+  <p class="text-center mt-10 text-red-500">User not found.</p>
+<% } else { %>
+<div class="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 px-10 py-10 flex gap-10">
+
+  <!-- Sidebar -->
+  <div class="w-[25%] bg-white rounded-3xl shadow-2xl p-8 space-y-8 transition-all duration-300 hover:shadow-3xl">
+
+    <!-- Profile -->
+    <div class="flex flex-col items-center text-center">
+      <div class="relative">
+        <img 
+          src="<%= user.profilePic ? user.profilePic : '/images/default-user.png' %>" 
+          class="w-28 h-28 rounded-full object-cover border-4 border-white shadow-lg"
+        />
+        <span class="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
+      </div>
+      <h3 class="mt-5 text-xl font-bold text-gray-800"><%= user.fullname %></h3>
+      <p class="text-gray-500 text-sm"><%= user.email %></p>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="space-y-3 text-gray-700 font-medium">
+      <a href="/account" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>👤</span> <span>Profile</span>
+      </a>
+      <a href="/cart" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>🛒</span> <span>My Cart</span>
+      </a>
+      <a href="/favorites" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>❤️</span> <span>Favorites</span>
+      </a>
+      <a href="/recent" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>🕒</span> <span>Recently Viewed</span>
+      </a>
+      <a href="/orders" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>📦</span> <span>Orders</span>
+      </a>
+      <a href="/payments" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>💳</span> <span>Payment Methods</span>
+      </a>
+      <a href="/account/settings" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>⚙️</span> <span>Account Settings</span>
+      </a>
+      <a href="/help" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-gray-100 hover:text-black transition-all duration-200">
+        <span>❓</span> <span>Help Center</span>
+      </a>
+
+      <a href="/users/logout" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 hover:text-red-700 font-semibold transition-all duration-200">
+        <span>🚪</span> <span>Logout</span>
+      </a>
+    </nav>
+
+    <!-- App Info -->
+    <div class="pt-6 border-t text-sm text-gray-500 text-center">
+      <p class="font-medium">Version 1.0.0</p>
+      <p class="text-xs mt-1">© 2026 Scatch Store</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="w-[75%] space-y-10">
+
+    <!-- Account Overview -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-semibold mb-6">Account Overview</h2>
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <!-- <p class="text-gray-500">Full Name</p> -->
+          <p class="font-medium"><b>Name.</b>     <%= user.fullname %></p>
+        </div>
+        <div>
+          <!-- <p class="text-gray-500">Email</p> -->
+          <p class="font-medium"><b>Email.</b>     <%= user.email %></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Change Password -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-semibold mb-6">Change Password</h2>
+      <form action="/users/change-password" method="POST" class="grid grid-cols-3 gap-4">
+        <input type="password" name="currentPassword" placeholder="Current Password" required class="border px-4 py-2 rounded-md" />
+        <input type="password" name="newPassword" placeholder="New Password" required class="border px-4 py-2 rounded-md" />
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" required class="border px-4 py-2 rounded-md" />
+        <button class="col-span-3 bg-black text-white py-2 rounded-md hover:bg-gray-900 transition">
+          Update Password
+        </button>
+      </form>
+    </div>
+
+    <!-- Orders -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-semibold mb-6">Order History</h2>
+      <% if (orders.length > 0) { %>
+        <div class="space-y-4">
+          <% orders.forEach(order => { %>
+            <div class="flex justify-between items-center border-b pb-3">
+              <div>
+                <p class="font-medium">Order #<%= order._id %></p>
+                <p class="text-sm text-gray-500"><%= new Date(order.createdAt).toDateString() %></p>
+              </div>
+              <p class="font-semibold text-green-600">₹ <%= order.total %></p>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-gray-500">No orders yet.</p>
+      <% } %>
+    </div>
+
+    <!-- Payment Methods -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-semibold mb-6">Payment Methods</h2>
+      <% if (user.payments && user.payments.length > 0) { %>
+        <div class="space-y-3">
+          <% user.payments.forEach(card => { %>
+            <div class="flex justify-between items-center border p-4 rounded-md">
+              <p>💳 **** **** **** <%= card.last4 %></p>
+              <form action="/payments/delete/<%= card._id %>" method="POST">
+                <button class="text-red-600 hover:underline">Remove</button>
+              </form>
+            </div>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <p class="text-gray-500">No payment methods added.</p>
+      <% } %>
+    </div>
+
+   <!-- Preferences -->
+<div class="bg-white dark:bg-gray-900 rounded-2xl shadow-xl p-8 transition-all duration-300">
+  <h2 class="text-2xl font-semibold mb-6 dark:text-white">Preferences</h2>
+  <div class="flex justify-between items-center">
+    <p class="dark:text-gray-300">Dark Mode</p>
+    <input
+      type="checkbox"
+      id="darkToggle"
+      class="w-5 h-5 cursor-pointer accent-black dark:accent-white"
+    />
+  </div>
+</div>
+
+
+    <!-- Help & Support -->
+    <div class="bg-white rounded-2xl shadow-xl p-8">
+      <h2 class="text-2xl font-semibold mb-6">Help & Support</h2>
+      <p class="text-gray-600 mb-4">Need help? Contact our support team anytime.</p>
+      <a href="/help" class="inline-block bg-black text-white px-6 py-2 rounded-md hover:bg-gray-900 transition">
+        Visit Help Center
+      </a>
+    </div>
+
+  </div>
+
+</div>
+
+<% } %>
+<%- include('./partials/footer') %>
